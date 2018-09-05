@@ -1,11 +1,24 @@
-pipeline {
-    agent any
-    options { disableConcurrentBuilds() }
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Hello Jenkins Declarative Pipeline'
-            }
+node {
+    def app
+
+    stage('Clone repository') {
+        /* Let's make sure we have the repository cloned to our workspace */
+
+        checkout scm
+    }
+
+    stage('Build image') {
+        /* This builds the actual image; synonymous to
+         * docker build on the command line */
+
+        app = docker.build("24may/example-app")
+    }
+
+    stage('Push image') {
+        /* Finally, we'll push the image into Docker Hub */
+
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
+            app.push("latest")
         }
     }
 }
