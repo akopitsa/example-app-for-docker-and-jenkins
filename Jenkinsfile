@@ -1,10 +1,11 @@
-node {
-    properties([disableConcurrentBuilds()])
-    stage('Example') {
-        if (env.BRANCH_NAME == 'master') {
-            echo 'I only execute on the master branch'
-        } else {
-            echo 'I execute elsewhere'
+pipeline {
+    agent any
+    options { disableConcurrentBuilds() }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Hello Jenkins Declarative Pipeline'
+            }
         }
     }
 }
